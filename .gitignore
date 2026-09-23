@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Testing / tooling
+.pytest_cache/
+.ruff_cache/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
