@@ -1,16 +1,25 @@
 from .agent import Agent
 from .models import AgentRequest
+from .llm.mock import MockLLM
 
 
-def main() -> None:
-    agent = Agent()
+def main():
+
+    agent = Agent(
+        llm=MockLLM()
+    )
 
     user_input = input("You> ")
 
-    request = AgentRequest(content=user_input)
+    request = AgentRequest(
+        content=user_input
+    )
+
     response = agent.run(request)
 
-    print(f"Agent> {response.content}")
+    print(
+        f"Agent> {response.content}"
+    )
 
 
 if __name__ == "__main__":
