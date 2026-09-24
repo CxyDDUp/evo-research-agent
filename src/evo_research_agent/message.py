@@ -1,14 +1,14 @@
-from dataclasses import dataclass
-from enum import Enum
+from dataclasses import dataclass, field
 
 
-class Role(str, Enum):
-    USER = "user"
-    ASSISTANT = "assistant"
-    SYSTEM = "system"
+@dataclass
+class ToolCall:
+    name: str
+    arguments: dict
 
 
-@dataclass(slots=True)
+@dataclass
 class Message:
-    role: Role
+    role: str
     content: str
+    tool_calls: list[ToolCall] | None = field(default=None)

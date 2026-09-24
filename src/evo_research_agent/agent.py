@@ -1,5 +1,5 @@
 from .models import AgentRequest, AgentResponse
-from .message import Message, Role
+from .message import Message
 from .memory import MessageHistory
 from .llm.base import LLMClient
 
@@ -21,7 +21,7 @@ class Agent:
 
 
         user_message = Message(
-            role=Role.USER,
+            role="user",
             content=request.content
         )
 
@@ -31,7 +31,15 @@ class Agent:
         response = self.llm.generate(
             self.history.get_all()
         )
+        # if response.tool_calls:
 
+        #     execute tools
+
+        #     add observation
+
+        #     call llm again
+        # else:
+        #     return response
 
         self.history.add(response)
 

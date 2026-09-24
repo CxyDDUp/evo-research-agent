@@ -1,6 +1,6 @@
 from .base import LLMClient
 
-from ..message import Message, Role
+from ..message import Message, ToolCall
 
 
 class MockLLM(LLMClient):
@@ -12,7 +12,22 @@ class MockLLM(LLMClient):
 
         last_message = messages[-1]
 
+        if "calculate" in last_message.content.lower():
+
+            return Message(
+                role="assistant",
+                content="",
+                tool_calls=[
+                    ToolCall(
+                        name="calculator",
+                        arguments={
+                            "expression": "100+200"
+                        }
+                    )
+                ]
+            )
+
         return Message(
-            role=Role.ASSISTANT,
-            content=f"Mock response to: {last_message.content}"
-        )   
+            role="assistant",
+            content="Mock response"
+        )
