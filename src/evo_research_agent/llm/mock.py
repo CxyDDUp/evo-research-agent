@@ -12,6 +12,17 @@ class MockLLM(LLMClient):
 
         last_message = messages[-1]
 
+
+        # Tool execution result
+        if last_message.role == "tool":
+
+            return Message(
+                role="assistant",
+                content=f"The calculation result is {last_message.content}"
+            )
+
+
+        # Decide whether to use tool
         if "calculate" in last_message.content.lower():
 
             return Message(
@@ -26,6 +37,7 @@ class MockLLM(LLMClient):
                     )
                 ]
             )
+
 
         return Message(
             role="assistant",
