@@ -11,7 +11,9 @@ registry.register(
 )
 
 
-executor = ToolExecutor(registry)
+executor = ToolExecutor(
+    registry
+)
 
 
 result = executor.execute(
@@ -21,3 +23,7 @@ result = executor.execute(
 
 
 print(result)
+
+print(result.success)
+
+print(result.output)

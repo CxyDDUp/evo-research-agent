@@ -13,17 +13,61 @@ class MockLLM(LLMClient):
         last_message = messages[-1]
 
 
-        # Tool execution result
+        # 1. Receive tool observation
         if last_message.role == "tool":
+
+            if last_message.content.startswith(
+                "Tool error:"
+            ):
+
+                error_message = (
+                    last_message.content
+                    .removeprefix("Tool error:")
+                    .strip()
+                )
+
+                return Message(
+                    role="assistant",
+                    content=(
+                        f"Calculation failed: "
+                        f"{error_message}"
+                    )
+                )
 
             return Message(
                 role="assistant",
-                content=f"The calculation result is {last_message.content}"
+                content=(
+                    f"The calculation result is "
+                    f"{last_message.content}"
+                )
             )
 
 
-        # Decide whether to use tool
-        if "calculate" in last_message.content.lower():
+        # 2. Decide whether to call calculator
+        user_content = (
+            last_message.content.strip()
+        )
+
+
+        if user_content.lower().startswith(
+            "calculate"
+        ):
+
+            expression = user_content[
+                len("calculate"):
+            ].strip()
+
+
+            if not expression:
+
+                return Message(
+                    role="assistant",
+                    content=(
+                        "Please provide an expression "
+                        "after 'calculate'."
+                    )
+                )
+
 
             return Message(
                 role="assistant",
@@ -32,13 +76,14 @@ class MockLLM(LLMClient):
                     ToolCall(
                         name="calculator",
                         arguments={
-                            "expression": "100+200"
+                            "expression": expression
                         }
                     )
                 ]
             )
 
 
+        # 3. Normal response
         return Message(
             role="assistant",
             content="Mock response"

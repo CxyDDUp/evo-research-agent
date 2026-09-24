@@ -1,9 +1,13 @@
 from .registry import ToolRegistry
+from .result import ToolResult
 
 
 class ToolExecutor:
 
-    def __init__(self, registry: ToolRegistry):
+    def __init__(
+        self,
+        registry: ToolRegistry
+    ):
         self.registry = registry
 
 
@@ -11,7 +15,29 @@ class ToolExecutor:
         self,
         tool_name: str,
         **kwargs
-    ):
-        tool = self.registry.get(tool_name)
-        
-        return tool.execute(**kwargs)
+    ) -> ToolResult:
+
+        try:
+
+            tool = self.registry.get(
+                tool_name
+            )
+
+            result = tool.execute(
+                **kwargs
+            )
+
+
+            return ToolResult(
+                success=True,
+                output=str(result)
+            )
+
+
+        except Exception as e:
+
+            return ToolResult(
+                success=False,
+                output="",
+                error=str(e)
+            )

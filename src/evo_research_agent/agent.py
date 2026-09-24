@@ -49,9 +49,22 @@ class Agent:
                 )
 
 
+                if result.success:
+
+                    observation_content = (
+                        result.output
+                    )
+
+                else:
+
+                    observation_content = (
+                        f"Tool error: {result.error}"
+                    )
+
+
                 observation = Message(
                     role="tool",
-                    content=str(result)
+                    content=observation_content
                 )
 
 
